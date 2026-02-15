@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  hexstrike-server:
+    build: .
+    container_name: hexstrike-ai
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./logs:/app/logs
+      - ./scans:/app/scans
+      # Persistance de l'historique des commandes ou cache si nécessaire
+      - ./.hexstrike_cache:/app/.cache
+    restart: unless-stopped
+    environment:
+      - HEXSTRIKE_PORT=8888
+      - HEXSTRIKE_HOST=0.0.0.0
+    # Mode privilégié parfois nécessaire pour certains outils de scan réseau
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
